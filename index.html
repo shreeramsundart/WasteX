@@ -3,72 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WasteX</title>
+    <title>Sign In / Sign Up</title>
     <style>
         body {
-            font: poppins;
+            font-family: Arial, sans-serif;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            height: 100vh;
+            align-items: center;
+            height: 100%;
             margin: 0;
             background-color: #f0f0f0;
+            padding: 10px;
         }
         .container {
-            text-align: center;
- 
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
             position: relative;
         }
-        .button {
+        .container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
             display: block;
-            width: 200px;
-            padding: 15px;
-            margin: 10px 0;
-            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group textarea {
+            resize: vertical;
+            height: 100px;
+        }
+        .form-group button {
+            width: 100%;
+            padding: 10px;
             background-color: #4CAF50;
-            color: white;
             border: none;
+            color: white;
+            font-size: 16px;
             border-radius: 5px;
             cursor: pointer;
-            text-decoration: none;
         }
-        .button:hover {
+        .form-group button:hover {
             background-color: #45a049;
         }
-        .profile-icon {
-            position: absolute;
-            bottom:330px;
-            right: 1px;
-            height: 30px;
+        .switch-form {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .switch-form a {
+            color: #4CAF50;
             cursor: pointer;
+            text-decoration: underline;
         }
         .logo {
             position: absolute;
-            bottom:330px;
-            left: 1px;
-            height: 30px;
+            top: 20px;
+            left: 20px;
+            width: 100px;
+            height: 50px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <img src="WasteX Logo.png" alt="WasteX Logo" class="logo">
-        <img src="Profile Icon.png" alt="Profile Icon" class="profile-icon" onclick="openProfile()">
-        <button class="button" onclick="openPage('request_truck.html')">Request For the Truck</button>
-        <button class="button" onclick="openPage('find_bins.html')">Find Nearby RVM / Bins</button>
-        <button class="button" onclick="openPage('track_trucks.html')">Track the Garbage Trucks</button>
-        <button class="button" onclick="openPage('report_issues.html')">Report Issues</button>
-        <button class="button" onclick="openPage('suggest_feedback.html')">Suggest a Feedback</button>
+    <div class="container" id="signInContainer">
+        <img src="WasteX Logo.png" alt="Logo" class="logo">
+        <h1>Sign In</h1>
+        <form id="signInForm">
+            <div class="form-group">
+                <label for="signInPhoneNumber">Phone Number</label>
+                <input type="text" id="signInPhoneNumber" name="signInPhoneNumber" required>
+            </div>
+            <div class="form-group">
+                <button type="button" onclick="redirectToHome()">Sign In</button>
+            </div>
+        </form>
+        <div class="switch-form">
+            New user? <a onclick="showSignUp()">Sign Up</a>
+        </div>
+    </div>
+
+    <div class="container" id="signUpContainer" style="display: none;">
+        <img src="WasteX Logo.png" alt="Logo" class="logo">
+        <h1>Sign Up</h1>
+        <form id="signUpForm">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="aadharCardNumber">Aadhar Card Number</label>
+                <input type="text" id="aadharCardNumber" name="aadharCardNumber" required>
+            </div>
+            <div class="form-group">
+                <label for="rationCardNumber">Ration Card Number</label>
+                <input type="text" id="rationCardNumber" name="rationCardNumber" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <textarea id="address" name="address" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" id="city" name="city" required>
+            </div>
+            <div class="form-group">
+                <label for="pincode">Pincode</label>
+                <input type="text" id="pincode" name="pincode" required>
+            </div>
+            <div class="form-group">
+                <label for="photo">Upload Photo (Optional)</label>
+                <input type="file" id="photo" name="photo" accept="image/*">
+            </div>
+            <div class="form-group">
+                <button type="button" onclick="redirectToHome()">Sign Up</button>
+            </div>
+        </form>
+        <div class="switch-form">
+            Existing user? <a onclick="showSignIn()">Sign In</a>
+        </div>
     </div>
 
     <script>
-        function openPage(pageUrl) {
-            window.open(pageUrl, '_blank');
+        function showSignUp() {
+            document.getElementById('signInContainer').style.display = 'none';
+            document.getElementById('signUpContainer').style.display = 'block';
         }
-        
-        function openProfile() {
-            window.open('profile.html', '_blank');
+
+        function showSignIn() {
+            document.getElementById('signUpContainer').style.display = 'none';
+            document.getElementById('signInContainer').style.display = 'block';
+        }
+
+        function redirectToHome() {
+            window.location.href = 'home.html';
         }
     </script>
 </body>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WasteX</title>
+    <style>
+        body {
+            font: poppins;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+ 
+            position: relative;
+        }
+        .button {
+            display: block;
+            width: 200px;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .profile-icon {
+            position: absolute;
+            bottom:330px;
+            right: 1px;
+            height: 30px;
+            cursor: pointer;
+        }
+        .logo {
+            position: absolute;
+            bottom:330px;
+            left: 1px;
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="WasteX Logo.png" alt="WasteX Logo" class="logo">
+        <img src="Profile Icon.png" alt="Profile Icon" class="profile-icon" onclick="openProfile()">
+        <button class="button" onclick="openPage('request_truck.html')">Request For the Truck</button>
+        <button class="button" onclick="openPage('find_bins.html')">Find Nearby RVM / Bins</button>
+        <button class="button" onclick="openPage('track_trucks.html')">Track the Garbage Trucks</button>
+        <button class="button" onclick="openPage('report_issues.html')">Report Issues</button>
+        <button class="button" onclick="openPage('suggest_feedback.html')">Suggest a Feedback</button>
+    </div>
+
+    <script>
+        function openPage(pageUrl) {
+            window.open(pageUrl, '_blank');
+        }
+        
+        function openProfile() {
+            window.open('profile.html', '_blank');
+        }
+    </script>
+</body>
+</html>
