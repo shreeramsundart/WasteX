@@ -1,0 +1,56 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.request-form, .nearby-bins, .map-container, .report-form {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.request-form h2, .nearby-bins h2, .map-container h2, .report-form h2 {
+    margin-top: 0;
+}
+
+#find-bins-btn {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#bins-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#bins-list li {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+#bins-list li:last-child {
+    border-bottom: none;
+}
+
+#map-canvas {
+    width: 100%;
+    height: 300px;
+    border: 1px solid #ccc;
+}
+
+#request-truck-btn {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

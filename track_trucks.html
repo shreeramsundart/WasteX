@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Garbage Trucks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #map {
+            height: 80%;
+            width: 100%;
+        }
+        .truck-info {
+            margin: 20px;
+            width: 90%;
+            max-width: 400px;
+        }
+        .truck-info div {
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin: 10px 0;
+            background-color: white;
+            border-radius: 5px;
+        }
+        .truck-info div span {
+            display: block;
+            margin: 5px 0;
+        }
+        .capacity {
+            font-weight: bold;
+            color: #555;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .logo {
+            position:static;
+            top: 20px;
+            left: 20px;
+            width: 100px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    
+    <img src="WasteX Logo.png" alt="WasteX Logo" class="logo">
+    <div class="truck-info" id="truckInfo"></div>
+
+    
+    <script>
+        function initMap() {
+           if (navigator.geolocation) {
+               navigator.geolocation.getCurrentPosition((position) => {
+                   const userLocation = {
+                       lat: position.coords.latitude,
+                       lng: position.coords.longitude
+                   };
+                   
+                   const map = new google.maps.Map(document.getElementById('map'), {
+                       center: userLocation,
+                       zoom: 14
+                   });
+
+                   new google.maps.Marker({
+                       position: userLocation,
+                       map: map,
+                       title: "Your Location"
+                   });
+                   const trucks = [
+                   { id: 1, lat: userLocation.lat + 0.01, lng: userLocation.lng + 0.01, status: "Collecting", capacity: "Small" },
+                       { id: 2, lat: userLocation.lat + 0.02, lng: userLocation.lng - 0.01, status: "On Route",capacity:"Large" },
+                       { id: 3, lat: userLocation.lat - 0.01, lng: userLocation.lng + 0.01, status: "Returning" ,capacity :"Medium" },
+                       { id: 4, lat: userLocation.lat - 0.01, lng: userLocation.lng + 0.01, status: "Returning" ,capacity :"Medium" },
+                       { id: 5, lat: userLocation.lat - 0.01, lng: userLocation.lng + 0.01, status: "Returning",capacity :"Medium" },
+                   ];
+
+                   const truckInfo = document.getElementById('truckInfo');
+
+                   trucks.forEach((truck) => {
+                       new google.maps.Marker({
+                           position: { lat: truck.lat, lng: truck.lng },
+                           map: map,
+                           title: `Truck ${truck.id}`
+                       });
+
+                       const truckDiv = document.createElement('div');
+                       truckDiv.innerHTML = `
+                           <span>Truck ${truck.id}</span>
+                           <span>Status: ${truck.status}</span>
+                           <span><a href="https://www.google.com/maps/dir/?api=1&destination=${truck.lat},${truck.lng}" target="_blank">Direction</a></span>
+                       `;
+                       truckInfo.appendChild(truckDiv);
+                   });
+               });
+           } else {
+               alert("Geolocation is not supported by this browser.");
+           }
+       }
+   </script>
+
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
+</body>
+</html>

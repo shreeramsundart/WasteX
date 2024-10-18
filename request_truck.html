@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request For the Truck</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .input-group {
+            margin: 10px 0;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-group input {
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .logo {
+            position:static;
+            top: 20px;
+            left: 20px;
+            width: 100px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <img src="WasteX Logo.png" alt="WasteX Logo" class="logo">
+        <h1>Request For the Truck</h1>
+        <div class="input-group">
+            <label for="plastic">Plastic (kg):</label>
+            <input type="number" id="plastic" name="plastic" min="0" step="0.01">
+        </div>
+        <div class="input-group">
+            <label for="organic">Organic (kg):</label>
+            <input type="number" id="organic" name="organic" min="0" step="0.01">
+        </div>
+        <div class="input-group">
+            <label for="metal">Metal (kg):</label>
+            <input type="number" id="metal" name="metal" min="0" step="0.01">
+        </div>
+        <div class="input-group">
+            <label for="paper">Paper (kg):</label>
+            <input type="number" id="paper" name="paper" min="0" step="0.01">
+        </div>
+        <div class="input-group">
+            <label for="glass">Glass (kg):</label>
+            <input type="number" id="glass" name="glass" min="0" step="0.01">
+        </div>
+        <button class="button" onclick="calculateTotal()">Calculate Total Capacity</button>
+        <p id="totalCapacity"></p>
+        <button class="button" onclick="sendToControlRoom()">Request Truck</button>
+    </div>
+
+    <script>
+        function calculateTotal() {
+            const plastic = parseFloat(document.getElementById('plastic').value) || 0;
+            const organic = parseFloat(document.getElementById('organic').value) || 0;
+            const metal = parseFloat(document.getElementById('metal').value) || 0;
+            const paper = parseFloat(document.getElementById('paper').value) || 0;
+            const glass = parseFloat(document.getElementById('glass').value) || 0;
+
+            const totalCapacity = plastic + organic + metal + paper + glass;
+            document.getElementById('totalCapacity').innerText = `Total Capacity: ${totalCapacity} kg`;
+        }
+
+        function sendToControlRoom() {
+            const plastic = parseFloat(document.getElementById('plastic').value) || 0;
+            const organic = parseFloat(document.getElementById('organic').value) || 0;
+            const metal = parseFloat(document.getElementById('metal').value) || 0;
+            const paper = parseFloat(document.getElementById('paper').value) || 0;
+            const glass = parseFloat(document.getElementById('glass').value) || 0;
+
+            const totalCapacity = plastic + organic + metal + paper + glass;
+
+            alert(`Sending the following data to the control room:\nPlastic: ${plastic} kg\nOrganic: ${organic} kg\nMetal: ${metal} kg\nPaper: ${paper} kg\nGlass: ${glass} kg\nTotal Capacity: ${totalCapacity} kg`);
+        }
+    </script>
+</body>
+</html>

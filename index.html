@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WasteX - Sign In / Sign Up</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 90%;
+            height: 100%;
+            max-width: 350px;
+            max-height: 650px;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            position: relative;
+            overflow: auto;
+        }
+        h1 {
+            text-align: center;
+            width: 100%;
+        }
+        .logo {
+            width: 25%;
+            margin-bottom: 20px;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 93%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .switch-form {
+            margin-top: 10px;
+            text-align: center;
+        }
+        .message {
+            color: red;
+            font-size: 0.9em;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="signUpContainer">
+        <img src="Images/WasteX Logo.png" alt="Logo" class="logo"><br><br>
+        <h1>Sign Up</h1>
+        <form id="signUpForm">
+            <div class="form-group">
+                <label for="signUpName">Name</label>
+                <input type="text" id="signUpName" name="signUpName" required>
+            </div>
+            <div class="form-group">
+                <label for="signUpEmail">Email</label>
+                <input type="email" id="signUpEmail" name="signUpEmail" required>
+            </div>
+            <div class="form-group">
+                <label for="signUpPassword">Password</label>
+                <input type="password" id="signUpPassword" name="signUpPassword" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Sign Up</button>
+            </div>
+            <p id="signUpMessage" class="message"></p>
+        </form>
+        <div class="switch-form">
+            Already have an account? <a href="javascript:void(0);" onclick="showSignIn()">Sign In</a>
+        </div>
+    </div>
+    
+    <div class="container" id="signInContainer" style="display: none;">
+        <img src="Images/WasteX Logo.png" alt="Logo" class="logo"><br><br>
+        <h1>Sign In</h1>
+        <form id="signInForm">
+            <div class="form-group">
+                <label for="signInEmail">Email</label>
+                <input type="email" id="signInEmail" name="signInEmail" required>
+            </div>
+            <div class="form-group">
+                <label for="signInPassword">Password</label>
+                <input type="password" id="signInPassword" name="signInPassword" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Sign In</button>
+            </div>
+            <p id="signInMessage" class="message"></p>
+        </form>
+        <div class="switch-form">
+            New user? <a href="javascript:void(0);" onclick="showSignUp()">Sign Up</a>
+        </div>
+    </div>
+<script type="module">
+    // Import Firebase SDKs
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyAURpIZYVzo71y1iyvFyRIQdbZMcpgA7CE",
+        authDomain: "wastex-2703.firebaseapp.com",
+        projectId: "wastex-2703",
+        storageBucket: "wastex-2703.appspot.com",
+        messagingSenderId: "302799490899",
+        appId: "1:302799490899:web:c0b253afd4f4aa4ae09ba6",
+        measurementId: "G-CGCZRB9RTE"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+    const db = getFirestore();
+
+    // Sign Up Event Listener
+    document.getElementById('signUpForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const email = document.getElementById('signUpEmail').value;
+        const password = document.getElementById('signUpPassword').value;
+        const name = document.getElementById('signUpName').value;
+
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            // Store user details in the 'user_details' collection
+            await setDoc(doc(db, "user_details", user.uid), { email, name });
+
+            document.getElementById('signUpMessage').textContent = "Account created successfully!";
+            setTimeout(showSignIn, 1500);
+        } catch (error) {
+            if (error.code === 'auth/email-already-in-use') {
+                document.getElementById('signUpMessage').textContent = "User already exists. Redirecting to Sign In...";
+                setTimeout(showSignIn, 2000);
+            } else {
+                document.getElementById('signUpMessage').textContent = error.message;
+            }
+        }
+    });
+
+    // Sign In Event Listener
+    document.getElementById('signInForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const email = document.getElementById('signInEmail').value;
+        const password = document.getElementById('signInPassword').value;
+
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            document.getElementById('signInMessage').textContent = "Login successful! Redirecting....";
+            setTimeout(() => window.location.href = 'index.html', 1500);
+        } catch (error) {
+            document.getElementById('signInMessage').textContent = error.message;
+        }
+    });
+
+    // Show Sign Up Form
+    window.showSignUp = () => {
+        document.getElementById('signInContainer').style.display = "none";
+        document.getElementById('signUpContainer').style.display = "block";
+    };
+
+    // Show Sign In Form
+    window.showSignIn = () => {
+        document.getElementById('signUpContainer').style.display = "none";
+        document.getElementById('signInContainer').style.display = "block";
+    };
+</script>
+
+</body>
+</html>
