@@ -4,7 +4,7 @@ Welcome to the WasteX project repository! This repository contains the source co
 
 ## 🌐 View Project Online
 
-You can view the live version of the WasteX application here: [WasteX](wastex.netlify.app)
+You can view the live version of the WasteX application here: [WasteX](https://wastex.netlify.app/)
 
 ## 🌟 Features
 
