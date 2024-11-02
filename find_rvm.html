@@ -3,108 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Find Nearby Bins</title>
+    <title>WasteX - Nearby RVM's</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             height: 100vh;
-            background-color: #f0f0f0;
+            margin: 0;
         }
-        #map {
-            height: 60%;
-            width: 100%;
-        }
-        .bin-info {
-            margin: 20px;
+        .container {
             width: 90%;
             max-width: 400px;
+            max-height: 650px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
         }
-        .bin-info div {
+        .rvm-info h2 {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .rvm-item {
             padding: 10px;
-            border: 1px solid #ccc;
-            margin: 10px 0;
-            background-color: white;
-            border-radius: 5px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background-color: #f1f1f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .bin-info div span {
+        .rvm-item.full {
+            background-color: #fcc9c9; /* Light red background for full bins */
+        }
+        .rvm-item div {
+            flex-grow: 1;
+        }
+        .rvm-item span {
             display: block;
-            margin: 5px 0;
+            color: #555;
+            font-size: 0.9em;
         }
-        .logo {
-            position:static;
-            top: 20px;
-            left: 20px;
-            width: 100px;
-            height: 50px;
+        .rvm-item a.button {
+            display: inline-flex;
+            align-items: center;
+            color: white;
+            background-color: #28a745;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9em;
+            padding: 8px 12px;
+            border-radius: 10px;
+            transition: background-color 0.3s;
+        }
+        .rvm-item a.button:hover {
+            background-color: #218838;
+        }
+        .rvm-item a.button i {
+            margin-right: 5px;
+        }
+        /* Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 300px;
+            width: 80%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        .modal-content h3 {
+            margin: 0 0 10px;
+            color: #333;
+        }
+        .modal-content p {
+            font-size: 0.9em;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .modal-content button {
+            padding: 8px 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .modal-content button:hover {
+           background-color: #218838;
         }
     </style>
 </head>
 <body>
-    
-    <img src="WasteX Logo.png" alt="WasteX Logo" class="logo">
-    <div id="map"></div>
+    <div class="container">
+        <div class="rvm-info" id="rvmInfo">
+            <h2>Nearby RVM's</h2>
+        </div>
+    </div>
 
-    <div class="bin-info" id="binInfo"></div>
+    <!-- Modal Notification -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h3>Project Under Development</h3>
+            <p>This project is not deployed yet. You can explore the page, but some features may not work as expected.</p>
+            <button onclick="closeModal()">OK</button>
+        </div>
+    </div>
 
     <script>
-        function initMap() {
+        let userLocation = {}; 
+        let locationRetrieved = false; 
+
+        function displayBins() {
+            const bins = [
+                { lat: userLocation.lat + 0.01, lng: userLocation.lng + 0.01, fill: 45, distance: 0.7 },
+                { lat: userLocation.lat + 0.02, lng: userLocation.lng - 0.01, fill: 95, distance: 1.7 },
+                { lat: userLocation.lat - 0.01, lng: userLocation.lng + 0.01, fill: 100, distance: 0.2 },
+                { lat: userLocation.lat - 0.02, lng: userLocation.lng - 0.01, fill: 0, distance: 0.35 },
+                { lat: userLocation.lat + 0.03, lng: userLocation.lng + 0.02, fill: 100, distance: 2.7 },
+                { lat: userLocation.lat + 0.04, lng: userLocation.lng + 0.03, fill: 80, distance: 3.1 },
+                { lat: userLocation.lat - 0.03, lng: userLocation.lng - 0.02, fill: 60, distance: 1.5 },
+                { lat: userLocation.lat + 0.01, lng: userLocation.lng - 0.03, fill: 30, distance: 2.2 },
+                { lat: userLocation.lat - 0.04, lng: userLocation.lng + 0.04, fill: 50, distance: 3.0 },
+                { lat: userLocation.lat + 0.02, lng: userLocation.lng + 0.05, fill: 90, distance: 2.4 }
+            ];
+
+            const binInfo = document.getElementById('rvmInfo');
+            bins.forEach((rvm, index) => {
+                const binDiv = document.createElement('div');
+                binDiv.className = 'rvm-item';
+
+                // Apply "full" class if the bin is full
+                if (rvm.fill === 100) {
+                    binDiv.classList.add('full');
+                }
+
+                binDiv.innerHTML = `
+                    <div>
+                        <span><strong><h4>RVM ${index + 1}</h4></strong></span>
+                        <span>Fill Level: ${rvm.fill}%</span>
+                        <span>Distance: ${rvm.distance} Km</span>
+                    </div>
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=${rvm.lat},${rvm.lng}" target="_blank" class="button">
+                        <i class="fas fa-directions"></i> Directions
+                    </a>
+                `;
+                binInfo.appendChild(binDiv);
+            });
+        }
+
+        function checkLocationServices() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((position) => {
-                    const userLocation = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
-                    
-                    const map = new google.maps.Map(document.getElementById('map'), {
-                        center: userLocation,
-                        zoom: 14
-                    });
-
-                    new google.maps.Marker({
-                        position: userLocation,
-                        map: map,
-                        title: "Your Location"
-                    });
-
-                    // Simulated bin data
-                    const bins = [
-                        { lat: userLocation.lat + 0.01, lng: userLocation.lng + 0.01, fill: 45, distance: 0.7 },
-                        { lat: userLocation.lat + 0.02, lng: userLocation.lng - 0.01, fill: 95, distance: 1.7 },
-                        { lat: userLocation.lat - 0.01, lng: userLocation.lng + 0.01, fill: 100, distance: 0.2 },
-                        { lat: userLocation.lat - 0.02, lng: userLocation.lng - 0.01, fill: 0, distance: 0.35 },
-                        { lat: userLocation.lat + 0.03, lng: userLocation.lng + 0.02, fill: 100, distance: 2.7 }
-                    ];
-
-                    const binInfo = document.getElementById('binInfo');
-
-                    bins.forEach((bin, index) => {
-                        new google.maps.Marker({
-                            position: { lat: bin.lat, lng: bin.lng },
-                            map: map,
-                            title: `Bin ${index + 1}`
-                        });
-
-                        const binDiv = document.createElement('div');
-                        binDiv.innerHTML = `
-                            <span>Bin ${index + 1}: ${bin.fill}%</span>
-                            <span>${bin.distance} Km</span>
-                            <span><a href="https://www.google.com/maps/dir/?api=1&destination=${bin.lat},${bin.lng}" target="_blank">Direction</a></span>
-                        `;
-                        binInfo.appendChild(binDiv);
-                    });
-                });
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        userLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        locationRetrieved = true;
+                        displayBins(); 
+                    },
+                    (error) => {
+                        if (!locationRetrieved) {
+                            alert("Please enable location services for efficient functionality.");
+                        }
+                        displayBins(); 
+                    }
+                );
             } else {
                 alert("Geolocation is not supported by this browser.");
+                displayBins(); 
             }
         }
-    </script>
 
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
+        window.onload = function() {
+            document.getElementById("modal").style.display = "flex";
+            checkLocationServices();
+        };
+
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+    </script>
 </body>
 </html>
