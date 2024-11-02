@@ -51,17 +51,21 @@
             font-size: 0.9em;
         }
         .truck-item a.button {
-            display: inline-flex;
-            align-items: center;
-            color: white;
-            background-color: #28a745;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.9em;
-            padding: 8px 12px;
-            border-radius: 10px;
-            transition: background-color 0.3s;
-        }
+    display: inline-flex;
+    align-items: center;
+    color: white;
+    background-color: #28a745;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9em;
+    padding: 12px 12px;
+    border-radius: 10px;
+    transition: background-color 0.3s;
+    white-space: nowrap; /* Keeps text in a single line */
+}
+
+
+
         .truck-item a.button:hover {
             background-color: #218838;
         }
@@ -194,9 +198,10 @@
                             </span>
                         </div>
                     </div>
-                    <a href="https://www.google.com/maps/dir/?api=1&destination=${truck.lat},${truck.lng}" target="_blank" class="button">
-                        <i class="fas fa-directions"></i> View on Map
-                    </a>
+ <a href="https://www.google.com/maps/dir/?api=1&destination=${truck.lat},${truck.lng}" target="_blank" class="button">
+    <i class="fas fa-map-marker-alt"></i> View on Map
+</a>
+
                 `;
                 truckInfo.appendChild(truckDiv);
             });
