@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WasteX</title>
+    <title>WasteX - Home</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-  body {
-            font-family: Arial, sans-serif;
+        body {
+            font-family: 'Poppins', sans-serif;
             background-color: #f4f4f4;
             display: flex;
             justify-content: center;
@@ -28,45 +31,44 @@
             overflow: auto;
         }
 
-.button {
-    display: block;
-    width: 100%;
-    padding: 20px;
-    margin: 15px 0;
-    font-size: 18px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    text-decoration: none;
-}
+        .button {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            margin: 15px 0;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+        }
 
-.button:hover {
-    background-color: #45a049;
-}
+        .button:hover {
+            background-color: #45a049;
+        }
 
-.profile-icon {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    height: 35px;
-    cursor: pointer;
-}
+        .profile-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            height: 35px;
+            cursor: pointer;
+        }
 
-.logo {
-        width: 25%;
-        margin-bottom: 20px;
-        position: absolute;
-        top: 20px;
-        left: 20px;
-}
-
+        .logo {
+            width: 25%;
+            margin-bottom: 20px;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="Images/WasteX Logo.png" alt="WasteX Logo" class="logo"><br><br><br><br>
+        <img src="Images/WasteX New Logo.jpg" alt="WasteX Logo" class="logo"><br><br><br><br>
         <img src="Images/Profile Icon.png" alt="Profile Icon" class="profile-icon" onclick="openProfile()">
         <button class="button" onclick="openPage('request_truck.html')">Request For the Truck</button>
         <button class="button" onclick="openPage('find_bins.html')">Find Nearby Bins</button>
@@ -78,11 +80,11 @@
 
     <script>
         function openPage(pageUrl) {
-            window.open(pageUrl, '_blank');
+            window.location.href = pageUrl;
         }
         
         function openProfile() {
-            window.open('profile.html', '_blank');
+            window.location.href = 'profile.html';
         }
     </script>
 </body>
