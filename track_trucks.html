@@ -63,9 +63,7 @@
     transition: background-color 0.3s;
     white-space: nowrap; /* Keeps text in a single line */
 }
-
-
-
+        
         .truck-item a.button:hover {
             background-color: #218838;
         }
@@ -198,51 +196,59 @@
                             </span>
                         </div>
                     </div>
- <a href="https://www.google.com/maps/dir/?api=1&destination=${truck.lat},${truck.lng}" target="_blank" class="button">
+                     <a href="https://www.google.com/maps/dir/?api=1&destination=${truck.lat},${truck.lng}" target="_blank" class="button">
     <i class="fas fa-map-marker-alt"></i> View on Map
 </a>
-
                 `;
                 truckInfo.appendChild(truckDiv);
             });
         }
 
-        // Check location services and show alert if disabled
-        function checkLocationServices() {
-            document.getElementById("loading").style.display = "block"; // Show loading
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        userLocation = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        };
-                        displayTrucks();
-                        document.getElementById("loading").style.display = "none"; // Hide loading
-                    },
-                    (error) => {
-                        document.getElementById("loading").style.display = "none"; // Hide loading
-                        showModal("Unable to retrieve your location. Please check your location settings.");
-                    }
-                );
-            } else {
-                document.getElementById("loading").style.display = "none"; // Hide loading
-                showModal("Geolocation is not supported by this browser.");
-            }
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
         }
 
-        function showModal(message) {
-            const modal = document.getElementById('modal');
-            modal.style.display = 'flex';
-            modal.querySelector('p').textContent = message; // Update the message in modal
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function showModal() {
+            document.getElementById('modal').style.display = 'flex';
         }
 
         function closeModal() {
             document.getElementById('modal').style.display = 'none';
         }
 
-        // Start tracking when the page loads
-        window.onload = checkLocationServices;
+        function getUserLocation() {
+            showLoading();
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        userLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                        };
+                        hideLoading();
+                        displayTrucks();
+                    },
+                    (error) => {
+                        hideLoading();
+                        console.error(error.message);
+                        showModal(); // Show modal on error
+                    }
+                );
+            } else {
+                hideLoading();
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        window.onload = function() {
+            showModal(); // Automatically show modal on load
+            getUserLocation();
+        };
     </script>
 </body>
 </html>
