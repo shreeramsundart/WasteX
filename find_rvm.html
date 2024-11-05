@@ -70,6 +70,29 @@
         .rvm-item a.button i {
             margin-right: 5px;
         }
+        /* Loading Spinner Styling */
+        #loading {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #333;
+            margin: 20px 0;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #28a745;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: inline-block;
+            animation: spin 1s linear infinite;
+            margin-bottom: 10px;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
         /* Modal Styling */
         .modal {
             display: none;
@@ -116,9 +139,12 @@
 </head>
 <body>
     <div class="container">
-        <div class="rvm-info" id="rvmInfo">
-            <h2>Nearby RVM's</h2>
+        <div id="loading">
+            <div class="spinner"></div>
+            <p>Loading nearby RVM's...</p>
+            <p style="font-size: 0.6em; color: #555;">Enable location services</p>
         </div>
+        
     </div>
 
     <!-- Modal Notification -->
@@ -170,6 +196,9 @@
                 `;
                 binInfo.appendChild(binDiv);
             });
+
+            document.getElementById("loading").style.display = "none";
+            document.getElementById("rvmInfo").style.display = "block";
         }
 
         function checkLocationServices() {
@@ -187,12 +216,10 @@
                         if (!locationRetrieved) {
                             alert("Please enable location services for efficient functionality.");
                         }
-                        displayBins(); 
                     }
                 );
             } else {
                 alert("Geolocation is not supported by this browser.");
-                displayBins(); 
             }
         }
 
