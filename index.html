@@ -31,10 +31,9 @@
             overflow: auto;
         }
         h2 {
-        padding-bottom: 15px;
-        width: 100%;
+            padding-bottom: 15px;
+            width: 100%;
         }
-
         .form-group {
             margin: 15px 0;
             position: relative;
@@ -83,19 +82,48 @@
             text-align: center;
             margin-top: 10px;
         }
-/* Styling for the GIF */
-.gif-container {
-    text-align: center;
-    margin-bottom: 1px;
-}
-.gif-container img {
-    width: 100%;
-    max-width: 300px;
-    height: auto;  /* Ensures the width adjusts while maintaining aspect ratio */
-    max-height: 250px; /* Adjust the max-height to reduce the GIF height */
-    border-radius: 10px;
-}
-    
+        .gif-container {
+            text-align: center;
+            margin-bottom: -5px;
+        }
+        .gif-container img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            max-height: 250px;
+            border-radius: 10px;
+            opacity: 0.8;  /* Increased transparency for the image */
+        }
+        .social-login {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .social-button {
+            background: white;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+            width: 32px;
+            height: 32px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .social-button img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .social-button:hover {
+            background-color: #f4f4f4;
+        }
+        .social-text {
+            font-size: 0.8em;  /* Reduced size */
+            color: #666;      /* Changed color */
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
@@ -104,7 +132,6 @@
             <img src="Images/WasteX Gif.gif" alt="WasteX GIF">
         </div>
         <h2>Welcome Onboard!</h2>
-        
         <form id="signUpForm">
             <div class="form-group">
                 <label for="signUpName">Name <span style="color: red;">*</span></label>
@@ -119,7 +146,6 @@
                 <input type="password" id="signUpPassword" name="signUpPassword" required>
                 <i class="fas fa-eye-slash toggle-password" id="toggleSignUpPassword"></i>
             </div>
-            
             <div class="form-group">
                 <button type="submit">Sign Up</button>
                 <div id="signUpLoading" class="loading">Creating account...</div>
@@ -129,9 +155,20 @@
         <div class="switch-form">
             Already have an account? <a href="javascript:void(0);" onclick="showSignIn()">Sign In</a>
         </div>
+        <br>
+        <div class="social-login">
+            <p class="social-text">or you can sign-up with</p>
+            <div class="social-button" id="googleSignUp">
+                <img src="Images/google.png" alt="Google">
+            </div>
+            <div class="social-button" id="githubSignUp">
+                <img src="Images/github.png" alt="GitHub">
+            </div>
+            <div class="social-button" id="facebookSignUp">
+                <img src="Images/facebook.png" alt="FaceBook">
+            </div>
+        </div>
     </div>
-    
-    
     <div class="container" id="signInContainer" style="display: none;">
         <div class="gif-container">
             <img src="Images/WasteX Gif.gif" alt="WasteX GIF">
@@ -147,7 +184,6 @@
                 <input type="password" id="signInPassword" name="signInPassword" required>
                 <i class="fas fa-eye-slash toggle-password" id="toggleSignInPassword"></i>
             </div>
-            
             <div class="form-group">
                 <button type="submit">Sign In</button>
                 <div id="signInLoading" class="loading">Signing in...</div>
@@ -157,109 +193,288 @@
         <div class="switch-form">
             New user? <a href="javascript:void(0);" onclick="showSignUp()">Sign Up</a>
         </div>
+        <br>
+        <div class="social-login">
+            <p class="social-text">or you can sign-in with</p>
+            <div class="social-button" id="googleSignIn">
+                <img src="Images/google.png" alt="Google">
+            </div>
+            <div class="social-button" id="githubSignIn">
+                <img src="Images/github.png" alt="GitHub">
+            </div>
+            <div class="social-button" id="facebookSignIn">
+                <img src="Images/facebook.png" alt="FaceBook">
+            </div>
+        </div>
     </div>
+ 
 
-<script type="module">
     
-    // Import Firebase SDKs
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-    // Firebase configuration
-    const firebaseConfig = {
-        apiKey: "AIzaSyAURpIZYVzo71y1iyvFyRIQdbZMcpgA7CE",
-        authDomain: "wastex-2703.firebaseapp.com",
-        projectId: "wastex-2703",
-        storageBucket: "wastex-2703.appspot.com",
-        messagingSenderId: "302799490899",
-        appId: "1:302799490899:web:c0b253afd4f4aa4ae09ba6",
-        measurementId: "G-CGCZRB9RTE"
-    };
+    
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth();
-    const db = getFirestore();
-
-    // Sign Up Event Listener
-    document.getElementById('signUpForm').addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const email = document.getElementById('signUpEmail').value;
-        const password = document.getElementById('signUpPassword').value;
-        const name = document.getElementById('signUpName').value;
-
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-        // Validate password strength
-        if (!passwordRegex.test(password)) {
-            document.getElementById('signUpMessage').textContent = "Password must be at least 8 characters long, contain an uppercase letter, a number, and a special character.";
-            return;
-        }
-
-        try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-
-            // Store user details in the 'user_details' collection
-            await setDoc(doc(db, "user_details", user.uid), { email, name });
-
-            document.getElementById('signUpMessage').textContent = "Account created successfully!";
-            setTimeout(showSignIn, 1500);
-        } catch (error) {
-            if (error.code === 'auth/email-already-in-use') {
-                document.getElementById('signUpMessage').textContent = "User already exists. Redirecting to Sign In...";
-                setTimeout(showSignIn, 1500);
-            } else {
-                document.getElementById('signUpMessage').textContent = error.message;
+    <script type="module">
+        // Import Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            sendEmailVerification, 
+            deleteUser, 
+            signInWithEmailAndPassword, 
+            GoogleAuthProvider, 
+            signInWithPopup, 
+            GithubAuthProvider,
+            FacebookAuthProvider,
+            fetchSignInMethodsForEmail, 
+            linkWithCredential 
+        } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            setDoc, 
+            deleteDoc 
+        } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+    
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAURpIZYVzo71y1iyvFyRIQdbZMcpgA7CE",
+            authDomain: "wastex-2703.firebaseapp.com",
+            projectId: "wastex-2703",
+            storageBucket: "wastex-2703.appspot.com",
+            messagingSenderId: "302799490899",
+            appId: "1:302799490899:web:c0b253afd4f4aa4ae09ba6",
+            measurementId: "G-CGCZRB9RTE"
+        };
+    
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const db = getFirestore();
+        const googleProvider = new GoogleAuthProvider();
+        const githubProvider = new GithubAuthProvider();
+        const facebookProvider = new FacebookAuthProvider();
+    
+        // Universal Firestore write function
+        async function saveUserData(uid, data) {
+            try {
+                await setDoc(doc(db, "verifiedUsers", uid), data);
+            } catch (error) {
+                console.error("Error saving user data:", error);
+                alert("Failed to save user data. Please try again.");
             }
         }
-    });
-
-    // Sign In Event Listener
-    document.getElementById('signInForm').addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const email = document.getElementById('signInEmail').value;
-        const password = document.getElementById('signInPassword').value;
-
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            document.getElementById('signInMessage').textContent = "Login successful! Redirecting....";
-            setTimeout(() => window.location.href = 'home.html', 1500);
-        } catch (error) {
-            document.getElementById('signInMessage').textContent = error.message;
+    
+        async function handleCredentialError(error) {
+            console.error('Error code:', error.code);
+            console.error('Error message:', error.message);
+    
+            if (error.code === 'auth/account-exists-with-different-credential') {
+                const email = error.customData.email;
+                const credential = error.credential;
+    
+                try {
+                    const methods = await fetchSignInMethodsForEmail(auth, email);
+    
+                    if (methods.includes('password')) {
+                        const password = prompt(`Enter your password for ${email}`);
+                        if (!password) return alert("Password entry canceled.");
+                        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                        await linkWithCredential(userCredential.user, credential);
+                    } else if (methods.includes('google.com')) {
+                        const googleResult = await signInWithPopup(auth, googleProvider);
+                        await linkWithCredential(googleResult.user, credential);
+                    } else if (methods.includes('github.com')) {
+                        const githubResult = await signInWithPopup(auth, githubProvider);
+                        await linkWithCredential(githubResult.user, credential);
+                    } else if (methods.includes('facebook.com')) {
+                        const facebookResult = await signInWithPopup(auth, facebookProvider);
+                        await linkWithCredential(facebookResult.user, credential);
+                    }
+    
+                    alert("Account linked successfully!");
+                    window.location.href = 'home.html';
+                } catch (linkError) {
+                    console.error('Error linking account:', linkError.message);
+                    alert(`Failed to link account: ${linkError.message}`);
+                }
+            } else {
+                console.error('Unhandled error:', error.message);
+                alert(`Error: ${error.message}`);
+                throw error;
+            }
         }
-    });
+    
+        // Social Sign-Up function
+        function socialSignUp(provider, providerName) {
+            signInWithPopup(auth, provider)
+                .then(async (result) => {
+                    const user = result.user;
+                    const methods = await fetchSignInMethodsForEmail(auth, user.email);
+    
+                    if (methods.length > 0) {
+                        alert("This email is already associated with another account. Please sign in.");
+                        window.location.href = 'signin.html';  // Redirect to sign-in page
+                    } else {
+                        await saveUserData(user.uid, {
+                            email: user.email,
+                            name: user.displayName
+                        });
+                        alert(`${providerName} sign-up successful!`);
+                        window.location.href = 'home.html';
+                    }
+                })
+                .catch(handleCredentialError);
+        }
+    
+        // Social Sign-In function
+        function socialSignIn(provider, providerName) {
+            signInWithPopup(auth, provider)
+                .then(async (result) => {
+                    const user = result.user;
+                    const methods = await fetchSignInMethodsForEmail(auth, user.email);
+    
+                    if (methods.length === 0) {
+                        alert("No account found with this email. Please sign up.");
+                        window.location.href = 'signup.html';  // Redirect to sign-up page
+                    } else {
+                        alert(`${providerName} sign-in successful!`);
+                        window.location.href = 'home.html';  // Redirect to home page
+                    }
+                })
+                .catch(handleCredentialError);
+        }
+    
+        // Event listeners for Social Sign-Ups
+        document.getElementById('googleSignUp').addEventListener('click', () => socialSignUp(googleProvider, 'Google'));
+        document.getElementById('githubSignUp').addEventListener('click', () => socialSignUp(githubProvider, 'GitHub'));
+        document.getElementById('facebookSignUp').addEventListener('click', () => socialSignUp(facebookProvider, 'Facebook'));
+    
+        // Event listeners for Social Sign-Ins
+        document.getElementById('googleSignIn').addEventListener('click', () => socialSignIn(googleProvider, 'Google'));
+        document.getElementById('githubSignIn').addEventListener('click', () => socialSignIn(githubProvider, 'GitHub'));
+        document.getElementById('facebookSignIn').addEventListener('click', () => socialSignIn(facebookProvider, 'Facebook'));
+    
+        // Sign-Up form submission
+document.getElementById('signUpForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const email = document.getElementById('signUpEmail').value;
+    const password = document.getElementById('signUpPassword').value;
+    const name = document.getElementById('signUpName').value;
 
-    // Toggle password visibility
-    document.getElementById('toggleSignUpPassword').addEventListener('click', function () {
-        const passwordField = document.getElementById('signUpPassword');
-        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordField.setAttribute('type', type);
-        this.classList.toggle('fa-eye');
-        this.classList.toggle('fa-eye-slash');
-    });
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-    document.getElementById('toggleSignInPassword').addEventListener('click', function () {
-        const passwordField = document.getElementById('signInPassword');
-        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordField.setAttribute('type', type);
-        this.classList.toggle('fa-eye');
-        this.classList.toggle('fa-eye-slash');
-    });
+    if (!emailRegex.test(email)) return alert("Invalid email format.");
+    if (!passwordRegex.test(password)) return alert("Password must be stronger.");
 
-    // Show Sign Up Form
-    window.showSignUp = () => {
-        document.getElementById('signInContainer').style.display = "none";
-        document.getElementById('signUpContainer').style.display = "block";
-    };
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        await setDoc(doc(db, "preVerificationUsers", user.uid), { email, name });
+        await sendEmailVerification(user);
+        alert(`Verification email sent to ${email}. Please verify your account.`);
 
-    // Show Sign In Form
-    window.showSignIn = () => {
-        document.getElementById('signUpContainer').style.display = "none";
-        document.getElementById('signInContainer').style.display = "block";
-    };
-</script>
+        setTimeout(async () => {
+            if (!user.emailVerified) {
+                await deleteUser(user);
+                await deleteDoc(doc(db, "preVerificationUsers", user.uid));
+                alert("Verification failed. Please try again.");
+            }
+        }, 600000);
+    } catch (error) {
+        if (error.code === 'auth/email-already-in-use') {
+            alert("This email is already in use with other provider Please Sign up with valid provider");
+
+        } else {
+            console.error('Sign-up error:', error);
+            alert(error.message);
+        }
+    }
+});
+
+// Sign-In form submission
+document.getElementById('signInForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const email = document.getElementById('signInEmail').value;
+    const password = document.getElementById('signInPassword').value;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    if (!emailRegex.test(email)) return alert("Invalid email format.");
+    if (!passwordRegex.test(password)) return alert("Password must be stronger.");
+
+    try {
+        // Check the sign-in methods linked to the email address
+        const methods = await fetchSignInMethodsForEmail(auth, email);
+
+        if (methods.length > 0) {
+            // If the email is already linked with any provider (Google, GitHub, Facebook)
+            if (methods.includes('google.com')) {
+                const googleProvider = new firebase.auth.GoogleAuthProvider();
+                await signInWithPopup(auth, googleProvider);
+                alert("Google sign-in successful! Redirecting...");
+                window.location.href = 'home.html';  // Redirect to home page
+            } else if (methods.includes('github.com')) {
+                const githubProvider = new firebase.auth.GithubAuthProvider();
+                await signInWithPopup(auth, githubProvider);
+                alert("GitHub sign-in successful! Redirecting...");
+                window.location.href = 'home.html';  // Redirect to home page
+            } else if (methods.includes('facebook.com')) {
+                const facebookProvider = new firebase.auth.FacebookAuthProvider();
+                await signInWithPopup(auth, facebookProvider);
+                alert("Facebook sign-in successful! Redirecting...");
+                window.location.href = 'home.html';  // Redirect to home page
+            } else {
+                // If the email is linked with another sign-in method, but not email/password
+                await signInWithEmailAndPassword(auth, email, password);
+                alert("Sign-in successful! Redirecting...");
+                window.location.href = 'home.html';  // Redirect to home page
+            }
+        } else {
+            // If no methods are linked to the email, prompt to sign up
+            alert("No account found with this email. Please sign up.");
+            showSignUp();  // Show sign-up container
+        }
+    } catch (error) {
+        console.error('Sign-in error:', error);
+        alert("Error signing in: " + error.message);  // Display detailed error message
+    }
+});
+
+
+
+    
+        // Toggle password visibility
+        document.getElementById('toggleSignUpPassword').addEventListener('click', function () {
+            const passwordField = document.getElementById('signUpPassword');
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+    
+        document.getElementById('toggleSignInPassword').addEventListener('click', function () {
+            const passwordField = document.getElementById('signInPassword');
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+    
+        // Show Forms
+        window.showSignUp = () => {
+            document.getElementById('signInContainer').style.display = "none";
+            document.getElementById('signUpContainer').style.display = "block";
+        };
+    
+        window.showSignIn = () => {
+            document.getElementById('signUpContainer').style.display = "none";
+            document.getElementById('signInContainer').style.display = "block";
+        };
+    </script>
+    
 
 </body>
 </html>
